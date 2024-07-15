@@ -16,13 +16,12 @@
 <div class="container">
     <h2>생각하는 데이터베이스 모델링</h2>
     <div class="card">
-        <div class="card-header">Online Shopping</div>
-        <div class="card-body">Content</div>
+        <div class="card-header">
+            <%@ include file="login.jsp" %>
+        </div>
+        <div class="card-body">상품 목록 / 장바구니 목록</div>
         <div class="card-footer">[7일 완성]생각하는 데이터베이스 모델링_박매일</div>
     </div>
-    <c:forEach var="product" items="${product}">
-        <div>${product.productName}</div>
-    </c:forEach>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

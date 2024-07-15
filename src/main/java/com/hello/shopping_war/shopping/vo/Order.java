@@ -1,4 +1,4 @@
-package com.hello.shopping_war.vo;
+package com.hello.shopping_war.shopping.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

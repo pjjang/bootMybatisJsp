@@ -1,4 +1,4 @@
-package com.hello.shopping_war.vo;
+package com.hello.shopping_war.member.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 public class Customer {
-    private String customer_id;
+    private String customerId;
     private String password;
-    private String customer_name;
+    private String customerName;
     private int age;
     private String rating;
     private String occupation;
