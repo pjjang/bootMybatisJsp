@@ -15,4 +15,9 @@ public class Order {
     private int productNumber;
     private int quantity;
     private Date orderDate;
+    private String productName;
+    private int inventory;
+    private int price;
+    private String manufacturer;
+    private int amount;
 }

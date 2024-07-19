@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hello.shopping_war.shopping.repository.OrderMapper">
+    <insert id="cartAdd" parameterType="Order">
+        insert into customer_product(customer_id, product_number, quantity)
+        values (#{customerId} ,#{productNumber}, 1)
+    </insert>
+
+    <select id="cartList" parameterType="String" resultType="Order">
+        select *
+        from customer_product cp
+        inner join product p on cp.product_number=p.product_number
+        where customer_id = #{customerId}
+    </select>
+</mapper>

@@ -1,9 +1,11 @@
 package com.hello.shopping_war.product.controller;
 
+import com.hello.shopping_war.member.service.MemberService;
 import com.hello.shopping_war.member.vo.Customer;
 import com.hello.shopping_war.product.service.ProductService;
 import com.hello.shopping_war.product.service.ProductServiceImpl;
 import com.hello.shopping_war.product.vo.Product;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,12 +25,23 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @Autowired
+    MemberService memberService;
+
     @GetMapping("/list")
     public String productList(Model model) throws Exception {
+
+
+//        Customer customer = new Customer();
+//        customer.setCustomerId(customerId);
+//        customer.setPassword(password);
+
         List<Product> product = productService.findProduct();
+//        Customer customers = memberService.loginfMemberInfo(customer);
 
         model.addAttribute("productList", product);
-        model.addAttribute("test", "크헉");
+        //model.addAttribute("customers", customers);
+
 
         log.info("productList = {}", product);
         return "product/productList";

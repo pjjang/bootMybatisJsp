@@ -23,30 +23,28 @@
         <div class="card-body">
             <c:if test="${!empty loginMember}">
                 <div class="row">
-                    <div class="col text-right"><button type="button" class="btn btn-sm btn-danger" onclick="goCartList('${loginMember.customerId}')">장바구니 목록</button></div>
+                    <div class="col text-right"><button type="button" class="btn btn-sm btn-danger" onclick="goOrder('${loginMember.customerId}')">주문하기</button></div>
                 </div>
             </c:if>
             <h2>상품 목록</h2>
             <table class="table table-bordered table-hover">
                 <thead>
-                    <tr class="text-center">
-                        <th>번호</th>
-                        <th>상품명</th>
-                        <th>재고량</th>
-                        <th>가격</th>
-                        <th>제조회사</th>
-                        <th>장바구니 담기</th>
-                    </tr>
+                <tr class="text-center">
+                    <th>제품명</th>
+                    <th>수량</th>
+                    <th>가격</th>
+                    <th>수량</th>
+                    <th>주문취소</th>
+                </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="list" items="${productList}">
+                <c:forEach var="list" items="${cartList}">
                     <tr>
-                        <td class="text-center">${list.productNumber}</td>
                         <td>${list.productName}</td>
                         <td class="text-right">${list.inventory}</td>
                         <td class="text-right">${list.price}</td>
-                        <td>${list.manufacturer}</td>
-                        <td class="text-center"><button type="submit" class="btn btn-sm btn-primary" onclick="goCartAdd(${list.productNumber}, '${loginMember.customerId}')"><i class="bi bi-cart"></i></button></td>
+                        <td>${list.amount}</td>
+                        <td class="text-center"><button type="submit" class="btn btn-sm btn-primary" onclick="orderCancel(${list.orderNumber}, '${loginMember.customerId}')"><i class="bi bi-cart"></i></button></td>
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -59,7 +57,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    function goCartAdd(productNumber, customerId) {
+    function orderCancel(productNumber, customerId) {
 
         if(${empty loginMember}) {
             alert("로그인을 하세요.");
@@ -102,7 +100,7 @@
             data: params,
             method: 'GET',
             success: function(result) {
-                location.href="/shopping/cartList?customerId="+customerId;
+                location.href="/shopping/cartList";
                 alert("장바구니 목록");
             },
             error: function() {
