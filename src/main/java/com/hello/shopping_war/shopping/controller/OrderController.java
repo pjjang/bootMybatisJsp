@@ -34,7 +34,17 @@ public class OrderController {
        order.setCustomerId(pOrder.getCustomerId());
        order.setProductNumber(pOrder.getProductNumber());
 
-       int result = orderService.cartAdd(order);
+        int purchaseExist = orderService.purchaseExist(order);
+
+        int result = 0;
+
+        if (purchaseExist > 0) {
+            result = orderService.amountAdd(order);
+        } else {
+            result = orderService.cartAdd(order);
+        }
+
+
        model.addAttribute("result", result);
        log.info("result = {}", result);
 

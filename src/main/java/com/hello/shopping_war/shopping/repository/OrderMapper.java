@@ -10,6 +10,11 @@ import java.util.List;
 public interface OrderMapper {
 
     List<Order> cartList(String customerId) throws Exception;
+
     int cartAdd(Order order) throws Exception;
+
+    int purchaseExist(Order order) throws Exception;
+
+    int amountAdd(Order order) throws Exception;
 
 }

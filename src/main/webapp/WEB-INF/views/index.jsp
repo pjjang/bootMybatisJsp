@@ -10,23 +10,107 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
 <body>
 
 <div class="container">
-    <h2>생각하는 데이터베이스 모델링</h2>
+    <h2>MVC기반 온라인 쇼핑 카트 구현하기</h2>
     <div class="card">
         <div class="card-header">
-            <%@ include file="login.jsp" %>
+            <%@ include file="../login.jsp" %>
         </div>
-        <div class="card-body">상품 목록 / 장바구니 목록</div>
-        <div class="card-footer">[7일 완성]생각하는 데이터베이스 모델링_박매일</div>
+        <div class="card-body">
+            <c:if test="${!empty loginMember}">
+                <div class="row">
+                    <div class="col text-right"><button type="button" class="btn btn-sm btn-danger" onclick="goCartList('${loginMember.customerId}')">장바구니 목록</button></div>
+                </div>
+            </c:if>
+            <h2>상품 목록</h2>
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr class="text-center">
+                    <th>번호</th>
+                    <th>상품명</th>
+                    <th>재고량</th>
+                    <th>가격</th>
+                    <th>제조회사</th>
+                    <th>장바구니 담기</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="list" items="${productList}">
+                    <tr>
+                        <td class="text-center">${list.productNumber}</td>
+                        <td>${list.productName}</td>
+                        <td class="text-right">${list.inventory}</td>
+                        <td class="text-right">${list.price}</td>
+                        <td>${list.manufacturer}</td>
+                        <td class="text-center"><button type="submit" class="btn btn-sm btn-primary" onclick="goCartAdd(${list.productNumber}, '${loginMember.customerId}')"><i class="bi bi-cart"></i></button></td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer text-center">Mini ShoppingMall</div>
     </div>
 </div>
-
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function goCartAdd(productNumber, customerId) {
+
+        if(${empty loginMember}) {
+            alert("로그인을 하세요.");
+            document.querySelector("#customerId").focus();
+            return false;
+        }
+
+        let params = {
+            customerId : customerId,
+            productNumber : productNumber
+        };
+
+
+        $.ajax({
+            url: '/shopping/cartAdd',
+            method: 'POST',
+            data: params,
+            success: function(result) {
+                console.log(result);
+                if(result > 0) {
+                    alert("상품이 장바구니에 담겼습니다.");
+                }
+            },
+            error: function(result) {
+                if(result == 0) {
+                    alert("장바구니 담기에 실패하였습니다 관리자에 문의 주세요.")
+                }
+            }
+        });
+    }
+
+    function goCartList(customerId) {
+
+        let params = {
+            customerId : customerId,
+        };
+
+        $.ajax({
+            url: '/shopping/cartList',
+            data: params,
+            method: 'GET',
+            success: function(result) {
+                location.href="/shopping/cartList?customerId="+customerId;
+                alert("장바구니 목록");
+            },
+            error: function() {
+                alert("장바구니 목록을 불러오는 도중 오류가 발생했습니다.");
+            }
+        });
+    }
+</script>
 </body>
 </html>
 

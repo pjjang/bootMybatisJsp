@@ -29,4 +29,15 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> cartList(String customerId) throws Exception {
         return orderMapper.cartList(customerId);
     }
+
+    @Override
+    public int purchaseExist(Order order) throws Exception {
+        return orderMapper.purchaseExist(order);
+    }
+
+    @Override
+    public int amountAdd(Order order) throws Exception {
+        order.setQuantity(order.getQuantity() + 1);
+        return orderMapper.amountAdd(order);
+    }
 }

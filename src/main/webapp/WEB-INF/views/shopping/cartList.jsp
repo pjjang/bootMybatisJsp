@@ -31,20 +31,18 @@
                 <thead>
                 <tr class="text-center">
                     <th>제품명</th>
-                    <th>수량</th>
                     <th>가격</th>
                     <th>수량</th>
-                    <th>주문취소</th>
+                    <th>삭제</th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach var="list" items="${cartList}">
                     <tr>
                         <td>${list.productName}</td>
-                        <td class="text-right">${list.inventory}</td>
                         <td class="text-right">${list.price}</td>
-                        <td>${list.amount}</td>
-                        <td class="text-center"><button type="submit" class="btn btn-sm btn-primary" onclick="orderCancel(${list.orderNumber}, '${loginMember.customerId}')"><i class="bi bi-cart"></i></button></td>
+                        <td>${list.quantity}</td>
+                        <td class="text-center"><button type="submit" class="btn btn-sm btn-primary" onclick="orderCancel(${list.orderNumber}, '${loginMember.customerId}')"><i class="bi bi-trash"></i></button></td>
                     </tr>
                 </c:forEach>
                 </tbody>

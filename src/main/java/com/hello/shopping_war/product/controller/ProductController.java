@@ -32,15 +32,11 @@ public class ProductController {
     public String productList(Model model) throws Exception {
 
 
-//        Customer customer = new Customer();
-//        customer.setCustomerId(customerId);
-//        customer.setPassword(password);
-
         List<Product> product = productService.findProduct();
-//        Customer customers = memberService.loginfMemberInfo(customer);
+
 
         model.addAttribute("productList", product);
-        //model.addAttribute("customers", customers);
+
 
 
         log.info("productList = {}", product);
