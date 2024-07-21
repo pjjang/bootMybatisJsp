@@ -44,7 +44,7 @@
                         <td class="text-center">${list.productNumber}</td>
                         <td>${list.productName}</td>
                         <td class="text-right">${list.inventory}</td>
-                        <td class="text-right">${list.price}</td>
+                        <td class="text-right formattedAmount">${list.price}</td>
                         <td>${list.manufacturer}</td>
                         <td class="text-center"><button type="submit" class="btn btn-sm btn-primary" onclick="goCartAdd(${list.productNumber}, '${loginMember.customerId}')"><i class="bi bi-cart"></i></button></td>
                     </tr>
@@ -110,6 +110,19 @@
             }
         });
     }
+
+    function updateFormattedAmount() {
+        document.querySelectorAll('.formattedAmount').forEach(function(cell) {
+            let amount = parseFloat(cell.textContent.replace(/[^\d.-]/g, ''));
+            cell.textContent = amount.toLocaleString('ko-KR') + '원';
+        });
+
+    }
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        updateFormattedAmount();
+    });
 </script>
 </body>
 </html>

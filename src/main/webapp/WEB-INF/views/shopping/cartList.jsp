@@ -31,8 +31,9 @@
                 <thead>
                 <tr class="text-center">
                     <th>제품명</th>
-                    <th>가격</th>
+                    <th>단가</th>
                     <th>수량</th>
+                    <th>금액</th>
                     <th>삭제</th>
                 </tr>
                 </thead>
@@ -40,11 +41,23 @@
                 <c:forEach var="list" items="${cartList}">
                     <tr>
                         <td>${list.productName}</td>
-                        <td class="text-right">${list.price}</td>
-                        <td>${list.quantity}</td>
-                        <td class="text-center"><button type="submit" class="btn btn-sm btn-primary" onclick="orderCancel(${list.orderNumber}, '${loginMember.customerId}')"><i class="bi bi-trash"></i></button></td>
+                        <td class="text-right formattedAmount" id="price${list.orderNumber}">${list.price}</td>
+                        <td>
+                            <input type="number" id="quantity${list.orderNumber}" name="quantity" min="1" max="999" class="form-control" value="${list.quantity}"
+                                   oninput="validateInput(event);" onchange="modifyQuantity(${list.orderNumber});">
+                        </td>
+                        <th class="text-right formattedAmount" id="buyPrice${list.orderNumber}">${list.price * list.quantity}</th>
+                        <td class="text-center">
+                            <button type="submit" class="btn btn-sm btn-primary" onclick="orderCancel(${list.orderNumber}, '${loginMember.customerId}')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
                     </tr>
                 </c:forEach>
+                        <tr>
+                            <td colspan="3">총 구매 금액</td>
+                            <td colspan="2" id="totalPrice"></td>
+                        </tr>
                 </tbody>
             </table>
         </div>
@@ -55,6 +68,14 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    function validateInput(event) {
+        var input = event.target;
+        // 최대 3자리 숫자만 허용
+        if (input.value.length > 3) {
+            input.value = input.value.slice(0, 3);
+        }
+    }
+
     function orderCancel(productNumber, customerId) {
 
         if(${empty loginMember}) {
@@ -106,6 +127,52 @@
             }
         });
     }
+
+    function calculateTotalPrice() {
+        let totalPrice = 0;
+        document.querySelectorAll("tbody tr").forEach(function(row) {
+            let priceCell = row.querySelector("td:nth-child(2)");
+            let quantityCell = row.querySelector("input[name='quantity']");
+
+            if (priceCell && quantityCell) {
+                let price = parseFloat(priceCell.textContent.replace(/[^0-9.]/g, ''));
+                let quantity = parseInt(quantityCell.value);
+                if (!isNaN(price) && !isNaN(quantity)) {
+                    totalPrice += price * quantity;
+                }
+            }
+        });
+
+        let totalPriceCell = document.getElementById("totalPrice");
+
+        if (totalPriceCell) {
+            totalPriceCell.textContent = totalPrice.toLocaleString('ko-KR') + '원';
+        }
+    }
+
+    function modifyQuantity(orderNumber) {
+        let quantity = parseInt($("#quantity" + orderNumber).val(), 10);
+        let price = parseFloat($("#price" + orderNumber).text().replace(/[^0-9.]/g, ''));
+
+        $("#buyPrice" + orderNumber).text((quantity * price).toLocaleString('ko-KR') + '원');
+
+        calculateTotalPrice(); // 수량 변경 시 총 금액 계산
+    }
+
+    function updateFormattedAmount() {
+        document.querySelectorAll('.formattedAmount').forEach(function(cell) {
+            let amount = parseFloat(cell.textContent.replace(/[^\d.-]/g, ''));
+            if (!isNaN(amount)) {
+                cell.textContent = amount.toLocaleString('ko-KR') + '원';
+            }
+        });
+    }
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        calculateTotalPrice(); // 페이지 로드 시 총 금액 계산
+        updateFormattedAmount();
+    });
 </script>
 </body>
 </html>

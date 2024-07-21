@@ -44,7 +44,6 @@ public class OrderController {
             result = orderService.cartAdd(order);
         }
 
-
        model.addAttribute("result", result);
        log.info("result = {}", result);
 
@@ -57,6 +56,8 @@ public class OrderController {
         System.out.println("customerId = " + order.getCustomerId());
         log.info("customerId = {}", order.getCustomerId());
         List<Order> cartList = orderService.cartList(order.getCustomerId());
+
+
         model.addAttribute("cartList", cartList);
         log.info("cartList = {}", cartList);
 
