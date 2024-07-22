@@ -44,10 +44,21 @@ public class OrderController {
             result = orderService.cartAdd(order);
         }
 
-       model.addAttribute("result", result);
-       log.info("result = {}", result);
 
        return result;
+    }
+
+    @PostMapping("/cartCancel")
+    @ResponseBody
+    public int cartCancel(Model model, Order pOrder) throws Exception {
+
+        Order order = new Order();
+        order.setCustomerId(pOrder.getCustomerId());
+        order.setOrderNumber(pOrder.getOrderNumber());
+
+        int result = orderService.cartCancel(order);
+
+        return result;
     }
 
     @GetMapping("/cartList")

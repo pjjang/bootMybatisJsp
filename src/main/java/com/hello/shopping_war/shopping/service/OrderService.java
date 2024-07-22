@@ -8,9 +8,12 @@ import java.util.List;
 public interface OrderService {
 
     public List<Order> cartList(String customerId) throws Exception;
+
     int cartAdd(Order pOrder) throws Exception;
 
     int purchaseExist(Order order) throws Exception;
 
     int amountAdd(Order pOrder) throws Exception;
+
+    int cartCancel(Order pOrder)  throws Exception;
 }

@@ -28,4 +28,11 @@
           set quantity = #{quantity}
     </update>
 
+    <delete id="cartCancel" parameterType="Order">
+        delete from customer_product
+         where order_number = #{orderNumber}
+           and customer_id = #{customerId}
+
+    </delete>
+
 </mapper>

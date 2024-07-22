@@ -17,4 +17,6 @@ public interface OrderMapper {
 
     int amountAdd(Order order) throws Exception;
 
+    int cartCancel(Order order) throws Exception;
+
 }

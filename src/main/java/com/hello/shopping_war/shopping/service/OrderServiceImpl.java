@@ -41,4 +41,9 @@ public class OrderServiceImpl implements OrderService {
         order.setQuantity(order.getQuantity() + 1);
         return orderMapper.amountAdd(order);
     }
+
+    @Override
+    public int cartCancel(Order order) throws Exception {
+        return orderMapper.cartCancel(order);
+    }
 }

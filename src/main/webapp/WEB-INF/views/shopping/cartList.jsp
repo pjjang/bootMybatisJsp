@@ -26,7 +26,7 @@
                     <div class="col text-right"><button type="button" class="btn btn-sm btn-danger" onclick="goOrder('${loginMember.customerId}')">주문하기</button></div>
                 </div>
             </c:if>
-            <h2>상품 목록</h2>
+            <h2>장바구니 목록</h2>
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr class="text-center">
@@ -48,7 +48,7 @@
                         </td>
                         <th class="text-right formattedAmount" id="buyPrice${list.orderNumber}">${list.price * list.quantity}</th>
                         <td class="text-center">
-                            <button type="submit" class="btn btn-sm btn-primary" onclick="orderCancel(${list.orderNumber}, '${loginMember.customerId}')">
+                            <button type="submit" class="btn btn-sm btn-primary" onclick="cartCancel(${list.orderNumber}, '${loginMember.customerId}')">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </td>
@@ -76,7 +76,7 @@
         }
     }
 
-    function orderCancel(productNumber, customerId) {
+    function cartCancel(orderNumber, customerId) {
 
         if(${empty loginMember}) {
             alert("로그인을 하세요.");
@@ -86,44 +86,24 @@
 
         let params = {
             customerId : customerId,
-            productNumber : productNumber
+            orderNumber : orderNumber
         };
 
 
         $.ajax({
-            url: '/shopping/cartAdd',
+            url: '/shopping/cartCancel',
             method: 'POST',
             data: params,
             success: function(result) {
-                console.log(result);
                 if(result > 0) {
-                    alert("상품이 장바구니에 담겼습니다.");
+                    alert("해당 상품이 장바구니에서 삭제되었습니다.");
+                    location.href="/shopping/cartList?customerId="+customerId;
                 }
             },
             error: function(result) {
                 if(result == 0) {
                     alert("장바구니 담기에 실패하였습니다 관리자에 문의 주세요.")
                 }
-            }
-        });
-    }
-
-    function goCartList(customerId) {
-
-        let params = {
-            customerId : customerId,
-        };
-
-        $.ajax({
-            url: '/shopping/cartList',
-            data: params,
-            method: 'GET',
-            success: function(result) {
-                location.href="/shopping/cartList";
-                alert("장바구니 목록");
-            },
-            error: function() {
-                alert("장바구니 목록을 불러오는 도중 오류가 발생했습니다.");
             }
         });
     }
