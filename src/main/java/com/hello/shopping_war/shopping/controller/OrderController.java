@@ -34,23 +34,43 @@ public class OrderController {
        order.setCustomerId(pOrder.getCustomerId());
        order.setProductNumber(pOrder.getProductNumber());
 
-        int purchaseExist = orderService.purchaseExist(order);
+        Order oldCartProduct = orderService.purchaseExist(order);
+
+        log.info("purchaseExist = {}", oldCartProduct);
+        log.info("productNumber = {}", order.getProductNumber());
 
         int result = 0;
 
-        if (purchaseExist > 0) {
-            result = orderService.amountAdd(order);
+        if (oldCartProduct != null) {
+            result = orderService.quantityAdd(oldCartProduct);
         } else {
             result = orderService.cartAdd(order);
         }
 
+        log.info("result = {}", result);
 
        return result;
     }
 
+    @PostMapping("/quantityUpdate")
+    @ResponseBody
+    public int quantityUpdate(Order pOrder) throws Exception {
+
+        Order order = new Order();
+        order.setCustomerId(pOrder.getCustomerId());
+        order.setProductNumber(pOrder.getProductNumber());
+        order.setQuantity(pOrder.getQuantity());
+
+        int result = orderService.quantityUpdate(order);
+
+        log.info("result = {}", result);
+
+        return result;
+    }
+
     @PostMapping("/cartCancel")
     @ResponseBody
-    public int cartCancel(Model model, Order pOrder) throws Exception {
+    public int cartCancel(Order pOrder) throws Exception {
 
         Order order = new Order();
         order.setCustomerId(pOrder.getCustomerId());

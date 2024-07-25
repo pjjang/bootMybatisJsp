@@ -13,19 +13,22 @@
         from customer_product cp
         inner join product p on cp.product_number=p.product_number
         where customer_id = #{customerId}
+          and order_yn = 'N'
         order by order_date desc
     </select>
 
-    <select id="purchaseExist" parameterType="Order" resultType="int">
-        select count(*)
+    <select id="purchaseExist" parameterType="Order" resultType="Order">
+        select *
         from customer_product
         where customer_id = #{customerId}
           and product_number = #{productNumber}
     </select>
 
-    <update id="amountAdd" parameterType="Order">
+    <update id="quantityUpdate" parameterType="Order">
         update customer_product
-          set quantity = #{quantity}
+           set quantity = #{quantity}
+         where customer_id = #{customerId}
+           and product_number = #{productNumber}
     </update>
 
     <delete id="cartCancel" parameterType="Order">

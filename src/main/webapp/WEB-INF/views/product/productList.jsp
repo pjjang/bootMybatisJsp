@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Bootstrap Example</title>
+    <title>MiniShopping Mall</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
@@ -103,7 +103,6 @@
             method: 'GET',
             success: function(result) {
                 location.href="/shopping/cartList?customerId="+customerId;
-                alert("장바구니 목록");
             },
             error: function() {
                 alert("장바구니 목록을 불러오는 도중 오류가 발생했습니다.");

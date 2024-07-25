@@ -11,9 +11,11 @@ public interface OrderService {
 
     int cartAdd(Order pOrder) throws Exception;
 
-    int purchaseExist(Order order) throws Exception;
+    Order purchaseExist(Order order) throws Exception;
 
-    int amountAdd(Order pOrder) throws Exception;
+    int quantityAdd(Order pOrder) throws Exception;
 
     int cartCancel(Order pOrder)  throws Exception;
+
+    int quantityUpdate(Order pOrder) throws Exception;
 }

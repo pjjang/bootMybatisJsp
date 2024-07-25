@@ -13,10 +13,10 @@ public interface OrderMapper {
 
     int cartAdd(Order order) throws Exception;
 
-    int purchaseExist(Order order) throws Exception;
-
-    int amountAdd(Order order) throws Exception;
+    Order purchaseExist(Order order) throws Exception;
 
     int cartCancel(Order order) throws Exception;
+
+    int quantityUpdate(Order order) throws Exception;
 
 }

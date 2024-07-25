@@ -5,11 +5,12 @@ import com.hello.shopping_war.product.repository.ProductMapper;
 import com.hello.shopping_war.product.vo.Product;
 import com.hello.shopping_war.shopping.repository.OrderMapper;
 import com.hello.shopping_war.shopping.vo.Order;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -32,18 +33,27 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public int purchaseExist(Order order) throws Exception {
+    public Order purchaseExist(Order order) throws Exception {
         return orderMapper.purchaseExist(order);
     }
 
     @Override
-    public int amountAdd(Order order) throws Exception {
+    public int quantityAdd(Order order) throws Exception {
+
         order.setQuantity(order.getQuantity() + 1);
-        return orderMapper.amountAdd(order);
+        return orderMapper.quantityUpdate(order);
     }
 
     @Override
     public int cartCancel(Order order) throws Exception {
         return orderMapper.cartCancel(order);
+    }
+
+    @Override
+    public int quantityUpdate(Order order) throws Exception {
+        log.info("getProductNumber = {}", order.getProductNumber());
+        log.info("getCustomerId = {}", order.getCustomerId());
+        log.info("getQuantity = {}", order.getQuantity());
+        return orderMapper.quantityUpdate(order);
     }
 }

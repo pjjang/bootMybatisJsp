@@ -41,12 +41,12 @@
                 <c:forEach var="list" items="${cartList}">
                     <tr>
                         <td>${list.productName}</td>
-                        <td class="text-right formattedAmount" id="price${list.orderNumber}">${list.price}</td>
+                        <td class="text-right formattedAmount" id="price${list.productNumber}">${list.price}</td>
                         <td>
-                            <input type="number" id="quantity${list.orderNumber}" name="quantity" min="1" max="999" class="form-control" value="${list.quantity}"
-                                   oninput="validateInput(event);" onchange="modifyQuantity(${list.orderNumber});">
+                            <input type="number" id="quantity${list.productNumber}" name="quantity" min="1" max="999" class="form-control" value="${list.quantity}"
+                                   oninput="validateInput(event);" onchange="modifyQuantity('${loginMember.customerId}', ${list.productNumber});">
                         </td>
-                        <th class="text-right formattedAmount" id="buyPrice${list.orderNumber}">${list.price * list.quantity}</th>
+                        <th class="text-right formattedAmount" id="buyPrice${list.productNumber}">${list.price * list.quantity}</th>
                         <td class="text-center">
                             <button type="submit" class="btn btn-sm btn-primary" onclick="cartCancel(${list.orderNumber}, '${loginMember.customerId}')">
                                 <i class="bi bi-trash"></i>
@@ -60,6 +60,9 @@
                         </tr>
                 </tbody>
             </table>
+            <div class="row">
+                <div class="col text-right"><button type="button" onclick="location.href='/shopping'" class="btn btn-sm btn-primary">쇼핑 계속하기</button></div>
+            </div>
         </div>
         <div class="card-footer text-center">Mini ShoppingMall</div>
     </div>
@@ -130,15 +133,54 @@
         }
     }
 
-    function modifyQuantity(orderNumber) {
-        let quantity = parseInt($("#quantity" + orderNumber).val(), 10);
-        let price = parseFloat($("#price" + orderNumber).text().replace(/[^0-9.]/g, ''));
+    function modifyQuantity(customerId, productNumber) {
 
-        $("#buyPrice" + orderNumber).text((quantity * price).toLocaleString('ko-KR') + '원');
+        let quantity = $("#quantity" + productNumber).val();
 
-        calculateTotalPrice(); // 수량 변경 시 총 금액 계산
+
+        let params = {
+          customerId : customerId,
+          productNumber : productNumber,
+          quantity : quantity
+        };
+
+        calculateTotalPrice();
+
+        //update 적용
+        $.ajax({
+            url: "/shopping/quantityUpdate",
+            method: "POST",
+            data: params,
+            success: function(result) {
+                if(result > 0) {
+                    location.href="/shopping/cartList?customerId=" + customerId;
+                }
+            },
+            error:function() {
+                if(result == 0) {
+                    alert("수량 변경에 실패하였습니다.");
+                }
+            }
+        });
     }
 
+    function goOrder(customerId) {
+
+        $.ajax({
+            url: "/shopping/complete",
+            method: "GET",
+            data: {"customerId" : customerId},
+            success: function() {
+                alert("주문이 완료 되었습니다.");
+                location.href="shopping/orderList"
+            },
+            error:function() {
+                alert("주문이 실패하였습니다.");
+            }
+        });
+    }
+
+    //단순 자바스크립트만으로 수량 변경이 이루어질경우
     function updateFormattedAmount() {
         document.querySelectorAll('.formattedAmount').forEach(function(cell) {
             let amount = parseFloat(cell.textContent.replace(/[^\d.-]/g, ''));
@@ -148,11 +190,11 @@
         });
     }
 
-
-    document.addEventListener("DOMContentLoaded", function() {
-        calculateTotalPrice(); // 페이지 로드 시 총 금액 계산
-        updateFormattedAmount();
-    });
+    //단순 자바스크립트만으로 수량 변경이 이루어질경우
+     document.addEventListener("DOMContentLoaded", function() {
+         calculateTotalPrice(); // 페이지 로드 시 총 금액 계산
+         updateFormattedAmount();
+     });
 </script>
 </body>
 </html>
