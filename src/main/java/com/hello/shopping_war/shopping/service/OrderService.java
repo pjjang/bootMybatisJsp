@@ -4,6 +4,7 @@ import com.hello.shopping_war.product.vo.Product;
 import com.hello.shopping_war.shopping.vo.Order;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
 
@@ -18,4 +19,6 @@ public interface OrderService {
     int cartCancel(Order pOrder)  throws Exception;
 
     int quantityUpdate(Order pOrder) throws Exception;
+
+    int orderComplete(Map<String, Object> paramMap) throws Exception;
 }

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+
 @Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -51,9 +53,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public int quantityUpdate(Order order) throws Exception {
-        log.info("getProductNumber = {}", order.getProductNumber());
-        log.info("getCustomerId = {}", order.getCustomerId());
-        log.info("getQuantity = {}", order.getQuantity());
         return orderMapper.quantityUpdate(order);
     }
+
+    @Override
+    public int orderComplete(Map<String, Object> paramMap)  throws Exception {
+        return orderMapper.orderComplete(paramMap);
+    }
+
+
 }

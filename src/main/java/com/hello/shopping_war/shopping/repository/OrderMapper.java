@@ -5,6 +5,7 @@ import com.hello.shopping_war.shopping.vo.Order;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -18,5 +19,7 @@ public interface OrderMapper {
     int cartCancel(Order order) throws Exception;
 
     int quantityUpdate(Order order) throws Exception;
+
+    int orderComplete(Map<String, Object> paramMap) throws Exception;
 
 }

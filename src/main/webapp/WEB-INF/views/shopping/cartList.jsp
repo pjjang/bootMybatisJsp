@@ -40,7 +40,7 @@
                 <tbody>
                 <c:forEach var="list" items="${cartList}">
                     <tr>
-                        <td>${list.productName}</td>
+                        <td>${list.productName}<input type="hidden" name="orderNumber" value="${list.orderNumber}'"></td>
                         <td class="text-right formattedAmount" id="price${list.productNumber}">${list.price}</td>
                         <td>
                             <input type="number" id="quantity${list.productNumber}" name="quantity" min="1" max="999" class="form-control" value="${list.quantity}"
@@ -165,17 +165,32 @@
     }
 
     function goOrder(customerId) {
+        // 모든 orderNumber 값을 수집
+        let orderNumbers = [];
+        document.querySelectorAll("input[name='orderNumber']").forEach(function(input) {
+            orderNumbers.push(input.value);
+        });
+
+        let params = {
+            customerId: customerId,
+            orderNumbers: orderNumbers
+        };
 
         $.ajax({
-            url: "/shopping/complete",
-            method: "GET",
-            data: {"customerId" : customerId},
-            success: function() {
-                alert("주문이 완료 되었습니다.");
-                location.href="shopping/orderList"
+            url: "/shopping/orderComplete",
+            method: "POST",
+            data: params,
+            traditional: true, // 배열을 전송할 때 사용
+            success: function(result) {
+                if (result > 0) {
+                    alert("주문이 완료 되었습니다.");
+                    location.href="/shopping";
+                }
             },
-            error:function() {
-                alert("주문이 실패하였습니다.");
+            error: function(result) {
+                if (result == 0) {
+                    alert("주문이 실패하였습니다.");
+                }
             }
         });
     }

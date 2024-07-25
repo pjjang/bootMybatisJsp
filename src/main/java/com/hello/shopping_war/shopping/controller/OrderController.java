@@ -10,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -81,6 +83,7 @@ public class OrderController {
         return result;
     }
 
+
     @GetMapping("/cartList")
     public String cartList(Order order, Model model) throws Exception {
 
@@ -93,5 +96,22 @@ public class OrderController {
         log.info("cartList = {}", cartList);
 
         return "shopping/cartList";
+    }
+
+    @PostMapping("/orderComplete")
+    @ResponseBody
+    public int orderComplete(@RequestParam String customerId, @RequestParam List<String> orderNumbers) throws Exception {
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("customerId", customerId);
+        paramMap.put("orderNumbers", orderNumbers);
+
+        log.info("orderNumbers = {}", orderNumbers);
+
+        int result = orderService.orderComplete(paramMap);
+
+        log.info("orderCompleteResult = {}", result);
+
+        return result;
+
     }
 }

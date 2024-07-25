@@ -20,4 +20,5 @@ public class Order {
     private int price;
     private String manufacturer;
     private int amount;
+    private String orderYn;
 }

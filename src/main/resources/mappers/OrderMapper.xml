@@ -35,7 +35,18 @@
         delete from customer_product
          where order_number = #{orderNumber}
            and customer_id = #{customerId}
-
     </delete>
+
+    <update id="orderComplete" parameterType="map">
+        update customer_product
+        set order_yn = 'Y'
+        where customer_id = #{customerId}
+        and order_number in
+        <foreach item="orderNumber" collection="orderNumbers" open="(" separator="," close=")">
+            #{orderNumber}
+        </foreach>
+    </update>
+
+
 
 </mapper>
