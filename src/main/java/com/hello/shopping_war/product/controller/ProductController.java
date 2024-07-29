@@ -31,13 +31,9 @@ public class ProductController {
     @GetMapping("/list")
     public String productList(Model model) throws Exception {
 
-
-        List<Product> product = productService.findProduct();
-
+        List<Product> product = productService.productList();
 
         model.addAttribute("productList", product);
-
-
 
         log.info("productList = {}", product);
         return "product/productList";

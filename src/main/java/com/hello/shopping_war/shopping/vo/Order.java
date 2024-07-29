@@ -21,4 +21,5 @@ public class Order {
     private String manufacturer;
     private int amount;
     private String orderYn;
+    private int completeNumber;
 }

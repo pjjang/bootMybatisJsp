@@ -22,4 +22,6 @@ public interface OrderMapper {
 
     int orderComplete(Map<String, Object> paramMap) throws Exception;
 
+    List<Order> orderList(int completeNumber) throws Exception;
+
 }

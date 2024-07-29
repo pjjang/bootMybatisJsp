@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface OrderService {
 
-    public List<Order> cartList(String customerId) throws Exception;
+    List<Order> cartList(String customerId) throws Exception;
 
     int cartAdd(Order pOrder) throws Exception;
 
@@ -21,4 +21,6 @@ public interface OrderService {
     int quantityUpdate(Order pOrder) throws Exception;
 
     int orderComplete(Map<String, Object> paramMap) throws Exception;
+
+    List<Order> orderList(int completeNumber) throws Exception;
 }

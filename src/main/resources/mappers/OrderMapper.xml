@@ -14,7 +14,7 @@
         inner join product p on cp.product_number=p.product_number
         where customer_id = #{customerId}
           and order_yn = 'N'
-        order by order_date desc
+        order by order_date asc
     </select>
 
     <select id="purchaseExist" parameterType="Order" resultType="Order">
@@ -22,6 +22,7 @@
         from customer_product
         where customer_id = #{customerId}
           and product_number = #{productNumber}
+          and order_yn = 'N'
     </select>
 
     <update id="quantityUpdate" parameterType="Order">
@@ -39,13 +40,22 @@
 
     <update id="orderComplete" parameterType="map">
         update customer_product
-        set order_yn = 'Y'
+        set order_yn = 'Y',
+            complete_number = #{completeNumber}
         where customer_id = #{customerId}
         and order_number in
-        <foreach item="orderNumber" collection="orderNumbers" open="(" separator="," close=")">
-            #{orderNumber}
+        <foreach item="orderNumbers" collection="orderNumbers" open="(" separator="," close=")">
+            #{orderNumbers}
         </foreach>
     </update>
+
+    <select id="orderList" parameterType="int" resultType="Order">
+        select *
+        from customer_product
+        where complete_number = #{complteNumber}
+          and order_yn = 'Y'
+        order by order_date asc
+    </select>
 
 
 

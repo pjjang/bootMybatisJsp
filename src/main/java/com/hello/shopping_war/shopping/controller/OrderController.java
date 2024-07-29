@@ -2,6 +2,7 @@ package com.hello.shopping_war.shopping.controller;
 
 
 import com.hello.shopping_war.product.service.ProductService;
+import com.hello.shopping_war.product.vo.Product;
 import com.hello.shopping_war.shopping.service.OrderService;
 import com.hello.shopping_war.shopping.vo.Order;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,9 @@ public class OrderController {
 
     @Autowired
     OrderService orderService;
+
+    @Autowired
+    ProductService productService;
 
     @GetMapping("")
     public String index(Model model) {
@@ -100,14 +104,39 @@ public class OrderController {
 
     @PostMapping("/orderComplete")
     @ResponseBody
-    public int orderComplete(@RequestParam String customerId, @RequestParam List<String> orderNumbers) throws Exception {
+    public int orderComplete(@RequestParam String customerId,
+                             @RequestParam List<String> orderNumbers,
+                             @RequestParam String completeNumber) throws Exception {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("customerId", customerId);
         paramMap.put("orderNumbers", orderNumbers);
+        paramMap.put("completeNumber", completeNumber);
 
         log.info("orderNumbers = {}", orderNumbers);
+        log.info("completeNumber = {}", completeNumber);
 
         int result = orderService.orderComplete(paramMap);
+
+
+        if(result > 0) {
+            List<Order> orderProduct = orderService.orderList(Integer.parseInt(completeNumber));
+
+            for (Order order : orderProduct) {
+                int productNumber = order.getProductNumber();
+                Product product = productService.findProduct(productNumber);
+                log.info("productList = {}", product);
+
+                int updateInventory = product.getInventory() - order.getQuantity();
+
+                Product updateProduct = new Product();
+
+                updateProduct.setInventory(updateInventory);
+                updateProduct.setProductNumber(productNumber);
+
+                productService.updateProduct(updateProduct);
+
+            }
+        }
 
         log.info("orderCompleteResult = {}", result);
 

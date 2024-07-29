@@ -15,7 +15,17 @@ public class ProductServiceImpl implements ProductService {
     private ProductMapper productMapper;
 
     @Override
-    public List<Product> findProduct() {
-        return productMapper.findProduct();
+    public List<Product> productList() throws Exception {
+        return productMapper.productList();
+    }
+
+    @Override
+    public Product findProduct(int productNumber) throws Exception {
+        return productMapper.findProduct(productNumber);
+    }
+
+    @Override
+    public int updateProduct(Product product) throws Exception {
+        return productMapper.updateProduct(product);
     }
 }

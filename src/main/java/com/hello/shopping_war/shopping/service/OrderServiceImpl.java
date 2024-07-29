@@ -61,5 +61,8 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.orderComplete(paramMap);
     }
 
-
+    @Override
+    public List<Order> orderList(int completeNumber) throws Exception {
+        return orderMapper.orderList(completeNumber);
+    }
 }

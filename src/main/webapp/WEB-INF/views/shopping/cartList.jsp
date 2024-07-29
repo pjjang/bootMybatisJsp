@@ -40,7 +40,7 @@
                 <tbody>
                 <c:forEach var="list" items="${cartList}">
                     <tr>
-                        <td>${list.productName}<input type="hidden" name="orderNumber" value="${list.orderNumber}'"></td>
+                        <td>${list.productName}<input type="hidden" name="orderNumber" value="${list.orderNumber}"></td>
                         <td class="text-right formattedAmount" id="price${list.productNumber}">${list.price}</td>
                         <td>
                             <input type="number" id="quantity${list.productNumber}" name="quantity" min="1" max="999" class="form-control" value="${list.quantity}"
@@ -173,7 +173,8 @@
 
         let params = {
             customerId: customerId,
-            orderNumbers: orderNumbers
+            orderNumbers: orderNumbers,
+            completeNumber: orderNumbers[0]
         };
 
         $.ajax({
