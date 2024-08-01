@@ -29,7 +29,10 @@ public class ProductController {
     MemberService memberService;
 
     @GetMapping("/list")
-    public String productList(Model model) throws Exception {
+    public String productList(Model model, HttpSession session) throws Exception {
+        if (session == null || session.getAttribute("loginMember") == null) {
+            return "redirect:/member/login";
+        }
 
         List<Product> product = productService.productList();
 

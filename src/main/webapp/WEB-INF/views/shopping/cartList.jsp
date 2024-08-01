@@ -21,7 +21,7 @@
             <%@ include file="../login.jsp" %>
         </div>
         <div class="card-body">
-            <c:if test="${!empty loginMember}">
+            <c:if test="${not empty sessionScope.loginMember}">
                 <div class="row">
                     <div class="col text-right"><button type="button" class="btn btn-sm btn-danger" onclick="goOrder('${loginMember.customerId}')">주문하기</button></div>
                 </div>
@@ -183,14 +183,24 @@
             data: params,
             traditional: true, // 배열을 전송할 때 사용
             success: function(result) {
-                if (result > 0) {
-                    alert("주문이 완료 되었습니다.");
-                    location.href="/shopping";
+                console.log(result);
+                if (result.sessionExpired) {
+                    alert("세션이 만료되었습니다. 로그인 페이지로 이동합니다.");
+                    location.href = "/member/login?sessionExpired=true";
+                } else if (result.result > 0) {
+                    alert("주문이 완료되었습니다.");
+                    location.href = "/shopping";
+                } else {
+                    alert("주문이 실패하였습니다.");
                 }
             },
-            error: function(result) {
-                if (result == 0) {
-                    alert("주문이 실패하였습니다.");
+            error: function(xhr, status, error) {
+                if (xhr.status === 401) {
+                    alert("세션이 만료되었습니다. 로그인 페이지로 이동합니다.");
+                    location.href = "/member/login?sessionExpired=true";
+                } else {
+                    console.error("AJAX Error: ", status, error);
+                    alert("서버 요청 중 오류가 발생하였습니다.");
                 }
             }
         });

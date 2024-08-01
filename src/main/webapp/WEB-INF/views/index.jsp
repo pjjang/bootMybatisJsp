@@ -18,7 +18,7 @@
     <h2>MVC기반 온라인 쇼핑 카트 구현하기</h2>
     <div class="card">
         <div class="card-header">
-            <%@ include file="../login.jsp" %>
+            <%@ include file="./login.jsp" %>
         </div>
         <div class="card-body">
             <c:if test="${!empty loginMember}">

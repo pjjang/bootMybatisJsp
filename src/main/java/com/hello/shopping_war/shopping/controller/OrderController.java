@@ -5,6 +5,7 @@ import com.hello.shopping_war.product.service.ProductService;
 import com.hello.shopping_war.product.vo.Product;
 import com.hello.shopping_war.shopping.service.OrderService;
 import com.hello.shopping_war.shopping.vo.Order;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,9 +37,9 @@ public class OrderController {
     @ResponseBody
     public int cartAdd(Model model, Order pOrder) throws Exception {
 
-       Order order = new Order();
-       order.setCustomerId(pOrder.getCustomerId());
-       order.setProductNumber(pOrder.getProductNumber());
+        Order order = new Order();
+        order.setCustomerId(pOrder.getCustomerId());
+        order.setProductNumber(pOrder.getProductNumber());
 
         Order oldCartProduct = orderService.purchaseExist(order);
 
@@ -55,7 +56,7 @@ public class OrderController {
 
         log.info("result = {}", result);
 
-       return result;
+        return result;
     }
 
     @PostMapping("/quantityUpdate")
@@ -104,9 +105,22 @@ public class OrderController {
 
     @PostMapping("/orderComplete")
     @ResponseBody
-    public int orderComplete(@RequestParam String customerId,
-                             @RequestParam List<String> orderNumbers,
-                             @RequestParam String completeNumber) throws Exception {
+    public Map<String, Object> orderComplete(@RequestParam String customerId,
+                                             @RequestParam List<String> orderNumbers,
+                                             @RequestParam String completeNumber,
+                                             HttpSession session) throws Exception {
+        Map<String, Object> response = new HashMap<>();
+
+        log.info("session.getAttribute = {}", session.getAttribute("loginMember"));
+        log.info("session = {}", session);
+
+        // 세션 확인
+        if (session.getAttribute("loginMember") == null) {
+            response.put("sessionExpired", true);
+            log.info("response = {}", response);
+            return response;
+        }
+
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("customerId", customerId);
         paramMap.put("orderNumbers", orderNumbers);
@@ -117,8 +131,7 @@ public class OrderController {
 
         int result = orderService.orderComplete(paramMap);
 
-
-        if(result > 0) {
+        if (result > 0) {
             List<Order> orderProduct = orderService.orderList(Integer.parseInt(completeNumber));
 
             for (Order order : orderProduct) {
@@ -129,18 +142,20 @@ public class OrderController {
                 int updateInventory = product.getInventory() - order.getQuantity();
 
                 Product updateProduct = new Product();
-
                 updateProduct.setInventory(updateInventory);
                 updateProduct.setProductNumber(productNumber);
 
                 productService.updateProduct(updateProduct);
-
             }
+            response.put("result", result);
+            response.put("sessionExpired", false);
+        } else {
+            response.put("result", result);
+            response.put("sessionExpired", false);
         }
 
         log.info("orderCompleteResult = {}", result);
-
-        return result;
-
+        log.info("response = {}", response);
+        return response;
     }
 }

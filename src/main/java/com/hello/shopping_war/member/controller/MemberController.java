@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,11 +27,16 @@ public class MemberController {
     @Autowired
     MemberService memberService;
 
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "login";
+    }
+
     @PostMapping("/login")
     public String loginMember(Model model,
                               @RequestParam("customerId") String customerId,
                               @RequestParam("password") String password,
-                                HttpSession session) {
+                              HttpSession session) {
 
         Customer customer = new Customer();
         customer.setCustomerId(customerId);
@@ -38,13 +44,13 @@ public class MemberController {
 
         Customer loginMember = memberService.loginfMemberInfo(customer);
 
-        if(loginMember != null) {
+        if (loginMember != null) {
             session.setAttribute("loginMember", loginMember);
             return "redirect:/product/list";
         }
 
-
-        return "product/productList";
+        model.addAttribute("loginError", true);
+        return "login";
     }
 
     @PostMapping("/logout")
@@ -55,10 +61,8 @@ public class MemberController {
             //session.removeAttribute("loginMember");
             //Session session =(Session)model.addAttribute("loginMember", session.getAttribute("loginMember"));
             session.invalidate();
-            return "redirect:/product/list";
         }
 
-
-        return "product/productList";
+        return "redirect:/login?logout";
     }
 }
