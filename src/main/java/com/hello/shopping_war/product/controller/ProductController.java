@@ -38,7 +38,6 @@ public class ProductController {
         int totalProductList = productService.countProductList();
         int totalPage = (int)Math.ceil((double) totalProductList / product.getSize());
 
-        product.setOffset((product.getPage() - 1) * product.getSize());
         List<Product> productList = productService.productList(product);
 
         log.info("totalPage = {}", totalPage);
