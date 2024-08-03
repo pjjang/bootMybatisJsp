@@ -41,7 +41,7 @@
 <c:if test="${param.sessionExpired eq 'true'}">
     <script type="text/javascript">
         function showSessionExpiredAlert() {
-            alert("세션이 만료되었습니다. 로그인을 다시 해주세요.");
+            alert("세션이 만료되었습니다. 로그인 페이지로 이동합니다.");
         }
         showSessionExpiredAlert();
     </script>

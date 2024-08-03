@@ -15,8 +15,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductMapper productMapper;
 
     @Override
-    public List<Product> productList() throws Exception {
-        return productMapper.productList();
+    public List<Product> productList(Product product) throws Exception {
+        return productMapper.productList(product);
     }
 
     @Override
@@ -27,5 +27,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public int updateProduct(Product product) throws Exception {
         return productMapper.updateProduct(product);
+    }
+
+    @Override
+    public int countProductList() throws Exception {
+        return productMapper.countProductList();
     }
 }

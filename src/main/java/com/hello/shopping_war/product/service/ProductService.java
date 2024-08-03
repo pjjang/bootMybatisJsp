@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface ProductService {
 
-    public List<Product> productList() throws Exception;
+    List<Product> productList(Product product) throws Exception;
 
-    public Product findProduct(int productNumber) throws Exception;
+    Product findProduct(int productNumber) throws Exception;
 
-    public int updateProduct(Product product) throws Exception;
+    int updateProduct(Product product) throws Exception;
+
+    int countProductList() throws Exception;
 }

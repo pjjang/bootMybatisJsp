@@ -29,14 +29,23 @@ public class ProductController {
     MemberService memberService;
 
     @GetMapping("/list")
-    public String productList(Model model, HttpSession session) throws Exception {
-        if (session == null || session.getAttribute("loginMember") == null) {
-            return "redirect:/member/login";
-        }
+    public String productList(Product product, Model model, HttpSession session) throws Exception {
+//        만약 필요시 로그인유저별 상품리스트 보여주기
+//        if (session == null || session.getAttribute("loginMember") == null) {
+//            return "redirect:/member/login";
+//        }
 
-        List<Product> product = productService.productList();
+        int totalProductList = productService.countProductList();
+        int totalPage = (int)Math.ceil((double) totalProductList / product.getSize());
 
-        model.addAttribute("productList", product);
+        product.setOffset((product.getPage() - 1) * product.getSize());
+        List<Product> productList = productService.productList(product);
+
+        log.info("totalPage = {}", totalPage);
+
+        model.addAttribute("productList", productList);
+        model.addAttribute("totalPage", totalPage);
+        model.addAttribute("currentPage", product.getPage());
 
         log.info("productList = {}", product);
         return "product/productList";

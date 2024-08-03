@@ -10,9 +10,9 @@ public interface ProductMapper {
 
     Product findProduct(int productNumber);
 
-    List<Product> productList();
+    List<Product> productList(Product product);
 
     int updateProduct(Product product);
 
-
+    int countProductList();
 }

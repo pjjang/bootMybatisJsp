@@ -51,6 +51,15 @@
                 </c:forEach>
                 </tbody>
             </table>
+            <div>
+                <c:if test="${currentPage > 1}">
+                    <a href="?page=${currentPage - 1}">Previous</a>
+                </c:if>
+                Page ${currentPage} of ${totalPage}
+                <c:if test="${currentPage < totalPage}">
+                    <a href="?page=${currentPage + 1}">Next</a>
+                </c:if>
+            </div>
         </div>
         <div class="card-footer text-center">Mini ShoppingMall</div>
     </div>

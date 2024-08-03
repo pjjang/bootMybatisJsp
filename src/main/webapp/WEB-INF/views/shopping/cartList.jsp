@@ -181,11 +181,9 @@
             url: "/shopping/orderComplete",
             method: "POST",
             data: params,
-            traditional: true, // 배열을 전송할 때 사용
+            traditional: true,
             success: function(result) {
-                console.log(result);
                 if (result.sessionExpired) {
-                    alert("세션이 만료되었습니다. 로그인 페이지로 이동합니다.");
                     location.href = "/member/login?sessionExpired=true";
                 } else if (result.result > 0) {
                     alert("주문이 완료되었습니다.");
@@ -196,8 +194,10 @@
             },
             error: function(xhr, status, error) {
                 if (xhr.status === 401) {
-                    alert("세션이 만료되었습니다. 로그인 페이지로 이동합니다.");
-                    location.href = "/member/login?sessionExpired=true";
+                    let result = JSON.parse(xhr.responseText);
+                    if (result.sessionExpired) {
+                        location.href = "/member/login?sessionExpired=true";
+                    }
                 } else {
                     console.error("AJAX Error: ", status, error);
                     alert("서버 요청 중 오류가 발생하였습니다.");

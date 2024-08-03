@@ -9,10 +9,18 @@
          where product_number = #{productNumber}
     </select>
 
-    <select id="productList" resultType="Product">
+    <select id="productList" parameterType="Product" resultType="Product">
         select *
         from product
+        limit #{offset}, #{size}
     </select>
+
+    <select id="countProductList" resultType="int">
+        select count(*)
+        from product
+    </select>
+
+
 
     <update id="updateProduct" parameterType="Product">
         update product
